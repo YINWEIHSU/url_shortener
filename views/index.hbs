@@ -1,0 +1,8 @@
+<form action="/" method="POST">
+  <div>請輸入網址</div>
+  <div class="input-group mb-3">
+    <input type="url" class="form-control" id="basic-url" aria-describedby="basic-addon3" required>
+  </div>
+  {{#if lastKeyword}}<div>你的短網址為: www.test.com/{{lastKeyword}}</div>{{/if}}
+  <button class="btn btn-primary" type="submit">Create</button>
+</form>
