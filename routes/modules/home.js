@@ -14,21 +14,35 @@ router.post('/', (req, res) => {
   const website = req.headers.referer
   let pairUrl = generateLastKeyword(5)
   const inputUrl = req.body.inputUrl
+  let checkCount = 0
 
   //確認轉換之網址是否重複
-  Url.exists({ inputUrl: `${inputUrl}` }, function (err, doc) {
+  Url.exists({ inputUrl: inputUrl }, function (err, doc) {
     if (err) {
       console.log(err)
     } else if (doc) {
       //若重複則撈出一樣的短網址
-      Url.findOne({ inputUrl: `${inputUrl}` }).lean()
+      Url.findOne({ inputUrl: inputUrl }).lean()
         .then((item) => {
           pairUrl = item.pairUrl
           res.render('index', { pairUrl, website })
         })
         .catch(error => console.log(error))
     } else {
-      //若不重複則給出短網址
+      //確認給出的短網址是否重複
+      do {
+        Url.findOne({ pairUrl: pairUrl })
+          .lean()
+          .then(item => {
+            if (item !== null) {
+              pairUrl = generateLastKeyword(5)
+            } else {
+              checkCount = 1
+            }
+          })
+      } while (checkCount < 1)
+
+      //若轉換網址與短網址皆不重複則給出短網址
       return Url.create({ inputUrl, pairUrl })
         .then(() => res.render('index', { pairUrl, website }))
         .catch(error => console.log(error))
