@@ -1,3 +1,4 @@
+//應該要載入main.js，但我一直失敗
 function onclickCopy(id) {
 
   const element = document.getElementById(id)
