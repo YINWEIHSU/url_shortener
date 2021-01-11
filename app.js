@@ -7,7 +7,7 @@ const bodyParser = require('body-parser')
 const routes = require('./routes')
 require('./config/mongoose')
 
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 
 app.engine('hbs', exphbs({
   defaultLayout: 'main', extname: 'hbs'

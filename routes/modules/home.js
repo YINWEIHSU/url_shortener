@@ -11,6 +11,7 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
+  const website = req.headers.host
   let pairUrl = generateLastKeyword(5)
   const inputUrl = req.body.inputUrl
 
@@ -21,12 +22,12 @@ router.post('/', (req, res) => {
       Url.findOne({ inputUrl: `${inputUrl}` }).lean()
         .then((item) => {
           pairUrl = item.pairUrl
-          res.render('index', { pairUrl })
+          res.render('index', { pairUrl, website })
         })
         .catch(error => console.log(error))
     } else {
       return Url.create({ inputUrl, pairUrl })
-        .then(() => res.render('index', { pairUrl }))
+        .then(() => res.render('index', { pairUrl, website }))
         .catch(error => console.log(error))
     }
   })
